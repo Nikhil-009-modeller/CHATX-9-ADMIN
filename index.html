@@ -1,2686 +1,539 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+<meta name="theme-color" content="#050505">
 <title>ChatX Analytics</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-/* =========================================================
-   CHATX ANALYTICS
-   COMPLETE HTML + CSS + JS
-========================================================= */
-
-:root{
-    --bg:#050505;
-    --panel:#0b0b0b;
-    --panel2:#101010;
-    --line:rgba(255,255,255,.08);
-    --line2:rgba(255,255,255,.13);
-    --text:#fff;
-    --muted:#777;
-    --muted2:#555;
-    --white:#fff;
-}
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    -webkit-tap-highlight-color:transparent;
-}
-
-html,
-body{
-    width:100%;
-    min-height:100%;
-}
-
-body{
-    background:
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(255,255,255,.07),
-            transparent 35%
-        ),
-        var(--bg);
-
-    color:var(--text);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-}
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
-
-button,
-input{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.hidden{
-    display:none !important;
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-.loginScreen{
-    width:100%;
-    min-height:100vh;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:20px;
-}
-
-.loginBox{
-    width:100%;
-    max-width:410px;
-
-    padding:30px;
-
-    border:1px solid var(--line2);
-    border-radius:28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.07),
-            rgba(255,255,255,.025)
-        );
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.5);
-
-    backdrop-filter:blur(25px);
-}
-
-.logo{
-    width:58px;
-    height:58px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:17px;
-
-    background:#fff;
-    color:#000;
-
-    font-size:17px;
-    font-weight:950;
-
-    margin-bottom:22px;
-}
-
-.loginTitle{
-    font-size:28px;
-    font-weight:950;
-    letter-spacing:-.7px;
-}
-
-.loginSubtitle{
-    margin-top:7px;
-    margin-bottom:27px;
-
-    color:#666;
-    font-size:12px;
-    line-height:1.5;
-}
-
-.input{
-    width:100%;
-    height:52px;
-
-    padding:0 15px;
-
-    margin-bottom:11px;
-
-    border:1px solid var(--line2);
-    border-radius:15px;
-
-    outline:none;
-
-    background:rgba(255,255,255,.045);
-    color:#fff;
-
-    font-size:13px;
-
-    transition:.2s;
-}
-
-.input::placeholder{
-    color:#555;
-}
-
-.input:focus{
-    border-color:rgba(255,255,255,.35);
-    background:rgba(255,255,255,.065);
-}
-
-.loginButton{
-    width:100%;
-    height:52px;
-
-    margin-top:5px;
-
-    border:0;
-    border-radius:15px;
-
-    background:#fff;
-    color:#000;
-
-    font-size:13px;
-    font-weight:900;
-
-    transition:.2s;
-}
-
-.loginButton:active{
-    transform:scale(.98);
-}
-
-.loginButton:disabled{
-    opacity:.55;
-}
-
-.loginError{
-    min-height:18px;
-
-    margin-top:13px;
-
-    color:#999;
-
-    font-size:11px;
-    text-align:center;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-.app{
-    min-height:100vh;
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar{
-    position:fixed;
-
-    left:0;
-    top:0;
-    bottom:0;
-
-    width:250px;
-
-    padding:22px 14px;
-
-    border-right:1px solid var(--line);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.045),
-            rgba(255,255,255,.012)
-        );
-
-    backdrop-filter:blur(28px);
-
-    z-index:100;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    padding:5px 9px 27px;
-}
-
-.brandLogo{
-    width:42px;
-    height:42px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:13px;
-
-    background:#fff;
-    color:#000;
-
-    font-size:13px;
-    font-weight:950;
-}
-
-.brandName{
-    font-size:19px;
-    font-weight:950;
-}
-
-.brandSub{
-    margin-top:2px;
-
-    color:#555;
-
-    font-size:9px;
-    font-weight:800;
-
-    letter-spacing:1.6px;
-}
-
-.nav{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-}
-
-.navButton{
-    width:100%;
-    height:49px;
-
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    padding:0 14px;
-
-    border:0;
-    border-radius:14px;
-
-    background:transparent;
-    color:#666;
-
-    font-size:13px;
-    font-weight:750;
-
-    text-align:left;
-
-    transition:.2s;
-}
-
-.navButton:hover{
-    color:#fff;
-    background:rgba(255,255,255,.045);
-}
-
-.navButton.active{
-    color:#fff;
-    background:rgba(255,255,255,.09);
-}
-
-.icon{
-    width:18px;
-    height:18px;
-
-    flex-shrink:0;
-
-    fill:none;
-    stroke:currentColor;
-    stroke-width:1.8;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-.logout{
-    position:absolute;
-
-    left:14px;
-    bottom:20px;
-
-    width:calc(100% - 28px);
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main{
-    min-height:100vh;
-
-    margin-left:250px;
-
-    padding:27px;
-
-    max-width:1700px;
-}
-
-.topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    margin-bottom:23px;
-}
-
-.title{
-    font-size:27px;
-    font-weight:950;
-
-    letter-spacing:-.7px;
-}
-
-.subtitle{
-    margin-top:4px;
-
-    color:#5f5f5f;
-
-    font-size:12px;
-}
-
-.adminTag{
-    display:flex;
-    align-items:center;
-    gap:7px;
-
-    padding:9px 13px;
-
-    border:1px solid var(--line);
-    border-radius:13px;
-
-    background:rgba(255,255,255,.035);
-
-    color:#aaa;
-
-    font-size:10px;
-    font-weight:900;
-
-    letter-spacing:.7px;
-}
-
-.adminDot{
-    width:6px;
-    height:6px;
-
-    border-radius:50%;
-
-    background:#fff;
-}
-
-
-/* =========================================================
-   STAT CARDS
-========================================================= */
-
-.stats{
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:12px;
-
-    margin-bottom:12px;
-}
-
-.statCard{
-    min-height:145px;
-
-    padding:20px;
-
-    border:1px solid var(--line);
-    border-radius:22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.065),
-            rgba(255,255,255,.018)
-        );
-
-    box-shadow:
-        0 15px 45px rgba(0,0,0,.2);
-}
-
-.statLabel{
-    color:#686868;
-
-    font-size:10px;
-    font-weight:850;
-
-    letter-spacing:1px;
-}
-
-.statValue{
-    display:block;
-
-    margin-top:15px;
-
-    font-size:36px;
-    font-weight:950;
-
-    letter-spacing:-1.5px;
-}
-
-.statBottom{
-    margin-top:10px;
-
-    color:#505050;
-
-    font-size:11px;
-}
-
-
-/* =========================================================
-   CARDS
-========================================================= */
-
-.grid{
-    display:grid;
-
-    grid-template-columns:
-        1.45fr 1fr;
-
-    gap:12px;
-
-    margin-bottom:12px;
-}
-
-.card{
-    padding:20px;
-
-    border:1px solid var(--line);
-    border-radius:22px;
-
-    background:
-        rgba(255,255,255,.032);
-
-    box-shadow:
-        0 15px 50px rgba(0,0,0,.18);
-}
-
-.cardHeader{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-}
-
-.cardTitle{
-    font-size:15px;
-    font-weight:900;
-}
-
-.cardDescription{
-    margin-top:4px;
-
-    color:#5b5b5b;
-
-    font-size:11px;
-}
-
-
-/* =========================================================
-   MINI STATS
-========================================================= */
-
-.miniGrid{
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:9px;
-
-    margin-top:20px;
-}
-
-.miniCard{
-    padding:15px;
-
-    border:1px solid rgba(255,255,255,.055);
-    border-radius:16px;
-
-    background:rgba(255,255,255,.035);
-}
-
-.miniLabel{
-    color:#5c5c5c;
-
-    font-size:9px;
-    font-weight:800;
-
-    letter-spacing:.8px;
-}
-
-.miniValue{
-    margin-top:8px;
-
-    font-size:22px;
-    font-weight:950;
-}
-
-
-/* =========================================================
-   CHART
-========================================================= */
-
-.chart{
-    height:230px;
-
-    margin-top:22px;
-
-    display:flex;
-    align-items:flex-end;
-    gap:4px;
-
-    overflow:hidden;
-}
-
-.chartBar{
-    flex:1;
-
-    min-width:3px;
-
-    border-radius:
-        5px 5px 2px 2px;
-
-    background:#fff;
-
-    opacity:.62;
-
-    transition:
-        height .45s ease,
-        opacity .2s ease;
-}
-
-.chartBar:hover{
-    opacity:1;
-}
-
-.empty{
-    color:#555;
-    font-size:12px;
-}
-
-
-/* =========================================================
-   LIST
-========================================================= */
-
-.list{
-    margin-top:16px;
-}
-
-.listItem{
-    min-height:60px;
-
-    display:flex;
-    align-items:center;
-    gap:11px;
-
-    padding:10px 0;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.045);
-}
-
-.listItem:last-child{
-    border-bottom:0;
-}
-
-.rank{
-    width:25px;
-
-    color:#555;
-
-    font-size:10px;
-    font-weight:900;
-
-    text-align:center;
-}
-
-.avatar{
-    width:38px;
-    height:38px;
-
-    flex-shrink:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#fff;
-    color:#000;
-
-    font-size:12px;
-    font-weight:950;
-}
-
-.itemMain{
-    flex:1;
-    min-width:0;
-}
-
-.itemName{
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-
-    font-size:13px;
-    font-weight:750;
-}
-
-.itemSub{
-    margin-top:3px;
-
-    color:#505050;
-
-    font-size:10px;
-}
-
-.itemValue{
-    color:#999;
-
-    font-size:11px;
-    font-weight:750;
-
-    white-space:nowrap;
-}
-
-
-/* =========================================================
-   MOBILE NAV
-========================================================= */
-
-.mobileNav{
-    display:none;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1000px){
-
-    .stats{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
-
+:root{--bg:#050505;--panel:#0b0b0b;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.13);--text:#fff}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;min-height:100%}
+body{background:radial-gradient(circle at 50% -10%,rgba(255,255,255,.07),transparent 35%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.loginScreen{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginBox{width:100%;max-width:410px;padding:30px;border:1px solid var(--line2);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));box-shadow:0 30px 100px rgba(0,0,0,.5);backdrop-filter:blur(25px)}
+.logo{width:58px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#fff;color:#000;font-size:17px;font-weight:950;margin-bottom:22px}
+.loginTitle{font-size:28px;font-weight:950;letter-spacing:-.7px}
+.loginSubtitle{margin-top:7px;margin-bottom:27px;color:#777;font-size:12px;line-height:1.5}
+.input{width:100%;height:52px;padding:0 15px;margin-bottom:11px;border:1px solid var(--line2);border-radius:15px;outline:none;background:rgba(255,255,255,.045);color:#fff;font-size:13px;transition:.2s}
+.input::placeholder{color:#555}.input:focus{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.065)}
+.loginButton{width:100%;height:52px;margin-top:5px;border:0;border-radius:15px;background:#fff;color:#000;font-size:13px;font-weight:900;transition:.2s}
+.loginButton:active{transform:scale(.98)}.loginButton:disabled{opacity:.55;cursor:wait}
+.loginError{min-height:18px;margin-top:13px;color:#bbb;font-size:11px;text-align:center;line-height:1.5}
+.app{min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;padding:22px 14px;border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));backdrop-filter:blur(28px);z-index:100}
+.brand{display:flex;align-items:center;gap:12px;padding:5px 9px 27px}
+.brandLogo{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:#fff;color:#000;font-size:13px;font-weight:950}
+.brandName{font-size:19px;font-weight:950}.brandSub{margin-top:2px;color:#555;font-size:9px;font-weight:800;letter-spacing:1.6px}
+.nav{display:flex;flex-direction:column;gap:5px}
+.navButton{width:100%;height:49px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:14px;background:transparent;color:#777;font-size:13px;font-weight:750;text-align:left;transition:.2s}
+.navButton:hover{color:#fff;background:rgba(255,255,255,.045)}
+.navButton.active{color:#fff;background:rgba(255,255,255,.09)}
+.icon{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.logout{position:absolute;left:14px;bottom:20px;width:calc(100% - 28px)}
+.main{min-height:100vh;margin-left:250px;padding:27px;max-width:1700px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:23px}
+.title{font-size:27px;font-weight:950;letter-spacing:-.7px}
+.subtitle{margin-top:4px;color:#777;font-size:12px}
+.adminTag{display:flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035);color:#aaa;font-size:10px;font-weight:900;letter-spacing:.7px;white-space:nowrap}
+.adminDot{width:6px;height:6px;border-radius:50%;background:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.statCard{min-height:145px;padding:20px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.018));box-shadow:0 15px 45px rgba(0,0,0,.2)}
+.statLabel{color:#777;font-size:10px;font-weight:850;letter-spacing:1px}
+.statValue{display:block;margin-top:15px;font-size:36px;font-weight:950;letter-spacing:-1.5px}
+.statBottom{margin-top:10px;color:#666;font-size:11px}
+.grid{display:grid;grid-template-columns:1.45fr 1fr;gap:12px;margin-bottom:12px}
+.card{padding:20px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.032);box-shadow:0 15px 50px rgba(0,0,0,.18)}
+.cardHeader{display:flex;align-items:flex-start;justify-content:space-between}
+.cardTitle{font-size:15px;font-weight:900}.cardDescription{margin-top:4px;color:#777;font-size:11px}
+.miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
+.miniCard{padding:15px;border:1px solid rgba(255,255,255,.055);border-radius:16px;background:rgba(255,255,255,.035)}
+.miniLabel{color:#777;font-size:9px;font-weight:800;letter-spacing:.8px}
+.miniValue{margin:8px 0;font-size:22px;font-weight:950}
+.chart{height:230px;margin-top:22px;display:flex;align-items:flex-end;gap:4px;overflow:hidden}
+.chartBar{flex:1;min-width:3px;border-radius:5px 5px 2px 2px;background:#fff;opacity:.62;transition:height .45s ease,opacity .2s ease}
+.chartBar:hover{opacity:1}
+.empty{color:#777;font-size:12px;padding:12px 0}
+.list{margin-top:16px}
+.listItem{min-height:60px;display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.045)}
+.listItem:last-child{border-bottom:0}
+.rank{width:25px;color:#777;font-size:10px;font-weight:900;text-align:center}
+.avatar{width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#fff;color:#000;font-size:12px;font-weight:950}
+.itemMain{flex:1;min-width:0}
+.itemName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:750}
+.itemSub{margin-top:3px;color:#777;font-size:10px}
+.itemValue{color:#aaa;font-size:11px;font-weight:750;white-space:nowrap}
+.mobileNav{display:none}
+.loadingOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(7px);z-index:500}
+.loaderBox{padding:18px 22px;border:1px solid var(--line);border-radius:16px;background:#111;color:#aaa;font-size:12px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
 @media(max-width:700px){
-
-    .sidebar{
-        display:none;
-    }
-
-    .main{
-        margin-left:0;
-
-        padding:
-            18px
-            16px
-            92px;
-    }
-
-    .topbar{
-        margin-bottom:18px;
-    }
-
-    .title{
-        font-size:23px;
-    }
-
-    .adminTag{
-        padding:8px 10px;
-        font-size:9px;
-    }
-
-    .mobileNav{
-        position:fixed;
-
-        left:10px;
-        right:10px;
-        bottom:10px;
-
-        height:63px;
-
-        display:flex;
-
-        border:1px solid var(--line2);
-        border-radius:21px;
-
-        background:
-            rgba(10,10,10,.9);
-
-        backdrop-filter:blur(25px);
-
-        z-index:200;
-    }
-
-    .mobileNav button{
-        flex:1;
-
-        border:0;
-        background:transparent;
-
-        color:#555;
-
-        font-size:9px;
-        font-weight:800;
-    }
-
-    .mobileNav button.active{
-        color:#fff;
-    }
-
+.sidebar{display:none}.main{margin-left:0;padding:18px 16px 92px}
+.topbar{margin-bottom:18px}.title{font-size:23px}
+.adminTag{padding:8px 10px;font-size:9px}
+.mobileNav{position:fixed;left:10px;right:10px;bottom:10px;height:63px;display:flex;border:1px solid var(--line2);border-radius:21px;background:rgba(10,10,10,.9);backdrop-filter:blur(25px);z-index:200}
+.mobileNav button{flex:1;border:0;background:transparent;color:#777;font-size:9px;font-weight:800}
+.mobileNav button.active{color:#fff}
 }
-
-
-@media(max-width:430px){
-
-    .stats{
-        gap:8px;
-    }
-
-    .statCard{
-        min-height:125px;
-        padding:15px;
-    }
-
-    .statValue{
-        font-size:27px;
-    }
-
-    .card{
-        padding:16px;
-    }
-
-    .chart{
-        height:180px;
-    }
-
-}
-
-
-@media(max-width:350px){
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loadingOverlay{
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(0,0,0,.55);
-
-    backdrop-filter:blur(7px);
-
-    z-index:500;
-}
-
-.loaderBox{
-    padding:18px 22px;
-
-    border:1px solid var(--line);
-    border-radius:16px;
-
-    background:#111;
-
-    color:#aaa;
-
-    font-size:12px;
-}
-
+@media(max-width:430px){.stats{gap:8px}.statCard{min-height:125px;padding:15px}.statValue{font-size:27px}.card{padding:16px}.chart{height:180px}}
+@media(max-width:350px){.stats{grid-template-columns:1fr}}
 </style>
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     LOGIN SCREEN
-===================================================== -->
-
-<div
-    id="loginScreen"
-    class="loginScreen"
->
-
-    <div class="loginBox">
-
-        <div class="logo">
-            CX
-        </div>
-
-        <div class="loginTitle">
-            ChatX Analytics
-        </div>
-
-        <div class="loginSubtitle">
-            Secure administrator dashboard
-            for your ChatX platform.
-        </div>
-
-        <form id="loginForm">
-
-            <input
-                id="emailInput"
-                class="input"
-                type="email"
-                placeholder="Admin email"
-                autocomplete="email"
-                required
-            >
-
-            <input
-                id="passwordInput"
-                class="input"
-                type="password"
-                placeholder="Password"
-                autocomplete="current-password"
-                required
-            >
-
-            <button
-                id="loginButton"
-                class="loginButton"
-                type="submit"
-            >
-                Sign In
-            </button>
-
-        </form>
-
-        <div
-            id="loginError"
-            class="loginError"
-        ></div>
-
-    </div>
-
+<div id="loginScreen" class="loginScreen">
+  <div class="loginBox">
+    <div class="logo">CX</div>
+    <div class="loginTitle">ChatX Analytics</div>
+    <div class="loginSubtitle">Secure administrator dashboard for your ChatX platform.</div>
+    <form id="loginForm">
+      <input id="emailInput" class="input" type="email" placeholder="Admin email" autocomplete="username" required>
+      <input id="passwordInput" class="input" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button id="loginButton" class="loginButton" type="submit">Sign In</button>
+    </form>
+    <div id="loginError" class="loginError" role="alert" aria-live="polite"></div>
+  </div>
 </div>
 
-
-<!-- =====================================================
-     APP
-===================================================== -->
-
-<div
-    id="app"
-    class="app hidden"
->
-
-
-    <!-- SIDEBAR -->
-
-    <aside class="sidebar">
-
-        <div class="brand">
-
-            <div class="brandLogo">
-                CX
-            </div>
-
-            <div>
-
-                <div class="brandName">
-                    ChatX
-                </div>
-
-                <div class="brandSub">
-                    ANALYTICS
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <nav class="nav">
-
-            <button
-                class="navButton active"
-                data-page="dashboard"
-            >
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-                    <rect
-                        x="3"
-                        y="3"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    />
-                    <rect
-                        x="14"
-                        y="3"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    />
-                    <rect
-                        x="3"
-                        y="14"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    />
-                    <rect
-                        x="14"
-                        y="14"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    />
-                </svg>
-
-                Dashboard
-
-            </button>
-
-
-            <button
-                class="navButton"
-                data-page="users"
-            >
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-                    <circle
-                        cx="9"
-                        cy="8"
-                        r="3"
-                    />
-
-                    <path
-                        d="M3 20c0-3.2 2.7-5 6-5s6 1.8 6 5"
-                    />
-
-                    <path
-                        d="M16 6c2.2.5 3.5 2 3.5 4"
-                    />
-
-                    <path
-                        d="M17 15c2.5.8 4 2.5 4 5"
-                    />
-                </svg>
-
-                Users
-
-            </button>
-
-
-            <button
-                class="navButton"
-                data-page="messages"
-            >
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v7A3.5 3.5 0 0 1 16.5 16H10l-5 4v-4.8A3.5 3.5 0 0 1 4 12.5z"
-                    />
-                </svg>
-
-                Messages
-
-            </button>
-
-
-            <button
-                class="navButton"
-                data-page="activity"
-            >
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        d="M3 12h4l2-7 4 14 2-7h6"
-                    />
-                </svg>
-
-                Activity
-
-            </button>
-
-        </nav>
-
-
-        <button
-            id="logoutButton"
-            class="navButton logout"
-        >
-
-            <svg
-                class="icon"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    d="M10 17l5-5-5-5"
-                />
-
-                <path
-                    d="M15 12H3"
-                />
-
-                <path
-                    d="M21 3v18"
-                />
-            </svg>
-
-            Logout
-
-        </button>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-        <header class="topbar">
-
-            <div>
-
-                <div
-                    id="pageTitle"
-                    class="title"
-                >
-                    Dashboard
-                </div>
-
-                <div
-                    id="pageSubtitle"
-                    class="subtitle"
-                >
-                    Real ChatX database analytics
-                </div>
-
-            </div>
-
-            <div class="adminTag">
-
-                <span class="adminDot"></span>
-
-                ADMIN
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             DASHBOARD
-        ================================================= -->
-
-        <section
-            id="dashboardPage"
-        >
-
-            <div class="stats">
-
-
-                <div class="statCard">
-
-                    <div class="statLabel">
-                        TOTAL USERS
-                    </div>
-
-                    <strong
-                        id="totalUsers"
-                        class="statValue"
-                    >
-                        0
-                    </strong>
-
-                    <div
-                        id="usersToday"
-                        class="statBottom"
-                    >
-                        0 new today
-                    </div>
-
-                </div>
-
-
-                <div class="statCard">
-
-                    <div class="statLabel">
-                        ACTIVE USERS
-                    </div>
-
-                    <strong
-                        id="activeUsers"
-                        class="statValue"
-                    >
-                        0
-                    </strong>
-
-                    <div class="statBottom">
-                        Last 7 days
-                    </div>
-
-                </div>
-
-
-                <div class="statCard">
-
-                    <div class="statLabel">
-                        TOTAL MESSAGES
-                    </div>
-
-                    <strong
-                        id="totalMessages"
-                        class="statValue"
-                    >
-                        0
-                    </strong>
-
-                    <div
-                        id="messagesToday"
-                        class="statBottom"
-                    >
-                        0 today
-                    </div>
-
-                </div>
-
-
-                <div class="statCard">
-
-                    <div class="statLabel">
-                        NEW USERS
-                    </div>
-
-                    <strong
-                        id="newUsers30"
-                        class="statValue"
-                    >
-                        0
-                    </strong>
-
-                    <div class="statBottom">
-                        Last 30 days
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="grid">
-
-
-                <!-- USER GRAPH -->
-
-                <div class="card">
-
-                    <div class="cardHeader">
-
-                        <div>
-
-                            <div class="cardTitle">
-                                User Growth
-                            </div>
-
-                            <div class="cardDescription">
-                                New registrations · 30 days
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div
-                        id="userChart"
-                        class="chart"
-                    ></div>
-
-                </div>
-
-
-                <!-- OVERVIEW -->
-
-                <div class="card">
-
-                    <div class="cardTitle">
-                        Platform Overview
-                    </div>
-
-                    <div class="cardDescription">
-                        Real-time database summary
-                    </div>
-
-
-                    <div class="miniGrid">
-
-
-                        <div class="miniCard">
-
-                            <div class="miniLabel">
-                                TODAY
-                            </div>
-
-                            <div
-                                id="miniUsersToday"
-                                class="miniValue"
-                            >
-                                0
-                            </div>
-
-                            <div class="miniLabel">
-                                NEW USERS
-                            </div>
-
-                        </div>
-
-
-                        <div class="miniCard">
-
-                            <div class="miniLabel">
-                                7 DAYS
-                            </div>
-
-                            <div
-                                id="miniUsers7"
-                                class="miniValue"
-                            >
-                                0
-                            </div>
-
-                            <div class="miniLabel">
-                                NEW USERS
-                            </div>
-
-                        </div>
-
-
-                        <div class="miniCard">
-
-                            <div class="miniLabel">
-                                7 DAYS
-                            </div>
-
-                            <div
-                                id="miniMessages7"
-                                class="miniValue"
-                            >
-                                0
-                            </div>
-
-                            <div class="miniLabel">
-                                MESSAGES
-                            </div>
-
-                        </div>
-
-
-                        <div class="miniCard">
-
-                            <div class="miniLabel">
-                                30 DAYS
-                            </div>
-
-                            <div
-                                id="miniMessages30"
-                                class="miniValue"
-                            >
-                                0
-                            </div>
-
-                            <div class="miniLabel">
-                                MESSAGES
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- MESSAGE GRAPH -->
-
-            <div class="card">
-
-                <div class="cardTitle">
-                    Message Activity
-                </div>
-
-                <div class="cardDescription">
-                    Messages sent · 30 days
-                </div>
-
-                <div
-                    id="messageChart"
-                    class="chart"
-                ></div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             USERS
-        ================================================= -->
-
-        <section
-            id="usersPage"
-            class="hidden"
-        >
-
-            <div class="card">
-
-                <div class="cardTitle">
-                    Most Active Users
-                </div>
-
-                <div class="cardDescription">
-                    Ranked by sent messages
-                </div>
-
-                <div
-                    id="topUsers"
-                    class="list"
-                ></div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             MESSAGES
-        ================================================= -->
-
-        <section
-            id="messagesPage"
-            class="hidden"
-        >
-
-            <div class="card">
-
-                <div class="cardTitle">
-                    Recent Messages
-                </div>
-
-                <div class="cardDescription">
-                    Latest ChatX messaging activity
-                </div>
-
-                <div
-                    id="recentMessages"
-                    class="list"
-                ></div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             ACTIVITY
-        ================================================= -->
-
-        <section
-            id="activityPage"
-            class="hidden"
-        >
-
-            <div class="card">
-
-                <div class="cardTitle">
-                    Recent Users
-                </div>
-
-                <div class="cardDescription">
-                    Latest registered ChatX accounts
-                </div>
-
-                <div
-                    id="recentUsers"
-                    class="list"
-                ></div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- MOBILE NAV -->
-
-    <nav class="mobileNav">
-
-        <button
-            class="active"
-            data-page="dashboard"
-        >
-            Dashboard
-        </button>
-
-        <button
-            data-page="users"
-        >
-            Users
-        </button>
-
-        <button
-            data-page="messages"
-        >
-            Messages
-        </button>
-
-        <button
-            data-page="activity"
-        >
-            Activity
-        </button>
-
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brandLogo">CX</div>
+      <div><div class="brandName">ChatX</div><div class="brandSub">ANALYTICS</div></div>
+    </div>
+    <nav class="nav">
+      <button class="navButton active" data-page="dashboard">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+      </button>
+      <button class="navButton" data-page="users">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.2 2.7-5 6-5s6 1.8 6 5"/><path d="M16 6c2.2.5 3.5 2 3.5 4"/><path d="M17 15c2.5.8 4 2.5 4 5"/></svg>Users
+      </button>
+      <button class="navButton" data-page="messages">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v7A3.5 3.5 0 0 1 16.5 16H10l-5 4v-4.8A3.5 3.5 0 0 1 4 12.5z"/></svg>Messages
+      </button>
+      <button class="navButton" data-page="activity">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>Activity
+      </button>
     </nav>
+    <button id="logoutButton" class="navButton logout">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 3v18"/></svg>Logout
+    </button>
+  </aside>
 
+  <main class="main">
+    <header class="topbar">
+      <div><div id="pageTitle" class="title">Dashboard</div><div id="pageSubtitle" class="subtitle">Real ChatX database analytics</div></div>
+      <div class="adminTag"><span class="adminDot"></span>ADMIN</div>
+    </header>
+
+    <section id="dashboardPage">
+      <div class="stats">
+        <div class="statCard"><div class="statLabel">TOTAL USERS</div><strong id="totalUsers" class="statValue">0</strong><div id="usersToday" class="statBottom">0 new today</div></div>
+        <div class="statCard"><div class="statLabel">ACTIVE USERS</div><strong id="activeUsers" class="statValue">0</strong><div class="statBottom">Last 7 days</div></div>
+        <div class="statCard"><div class="statLabel">TOTAL MESSAGES</div><strong id="totalMessages" class="statValue">0</strong><div id="messagesToday" class="statBottom">0 today</div></div>
+        <div class="statCard"><div class="statLabel">NEW USERS</div><strong id="newUsers30" class="statValue">0</strong><div class="statBottom">Last 30 days</div></div>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="cardHeader"><div><div class="cardTitle">User Growth</div><div class="cardDescription">New registrations · 30 days</div></div></div><div id="userChart" class="chart"></div></div>
+        <div class="card"><div class="cardTitle">Platform Overview</div><div class="cardDescription">Database summary</div>
+          <div class="miniGrid">
+            <div class="miniCard"><div class="miniLabel">TODAY</div><div id="miniUsersToday" class="miniValue">0</div><div class="miniLabel">NEW USERS</div></div>
+            <div class="miniCard"><div class="miniLabel">7 DAYS</div><div id="miniUsers7" class="miniValue">0</div><div class="miniLabel">NEW USERS</div></div>
+            <div class="miniCard"><div class="miniLabel">7 DAYS</div><div id="miniMessages7" class="miniValue">0</div><div class="miniLabel">MESSAGES</div></div>
+            <div class="miniCard"><div class="miniLabel">30 DAYS</div><div id="miniMessages30" class="miniValue">0</div><div class="miniLabel">MESSAGES</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="cardTitle">Message Activity</div><div class="cardDescription">Messages sent · 30 days</div><div id="messageChart" class="chart"></div></div>
+    </section>
+
+    <section id="usersPage" class="hidden"><div class="card"><div class="cardTitle">Most Active Users</div><div class="cardDescription">Ranked by sent messages</div><div id="topUsers" class="list"></div></div></section>
+    <section id="messagesPage" class="hidden"><div class="card"><div class="cardTitle">Recent Messages</div><div class="cardDescription">Latest ChatX messaging activity</div><div id="recentMessages" class="list"></div></div></section>
+    <section id="activityPage" class="hidden"><div class="card"><div class="cardTitle">Recent Users</div><div class="cardDescription">Latest registered ChatX accounts</div><div id="recentUsers" class="list"></div></div></section>
+  </main>
+
+  <nav class="mobileNav">
+    <button class="active" data-page="dashboard">Dashboard</button>
+    <button data-page="users">Users</button>
+    <button data-page="messages">Messages</button>
+    <button data-page="activity">Activity</button>
+  </nav>
 </div>
 
-
-<!-- =====================================================
-     LOADING
-===================================================== -->
-
-<div
-    id="loading"
-    class="loadingOverlay hidden"
->
-
-    <div class="loaderBox">
-        Loading ChatX Analytics...
-    </div>
-
-</div>
-
+<div id="loading" class="loadingOverlay hidden"><div class="loaderBox">Loading ChatX Analytics...</div></div>
 
 <script>
+"use strict";
 
-/* =========================================================
-   SUPABASE CONFIG
-========================================================= */
+/* CHATX-ADMIN project configuration */
+const SUPABASE_URL = "https://xetrdmwyhdfemsvybfzw.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_IwL_J7SmWaT8p56iNKNL6w_UnV0G2O4";
 
-const SUPABASE_URL =
-    "https://ktzlnjehfbjzrqtgwxee.supabase.co";
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_sxrL1sGY22smdk3uSd1F1g_wdEngxGA";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const loginScreen =
-    document.getElementById(
-        "loginScreen"
-    );
-
-const app =
-    document.getElementById(
-        "app"
-    );
-
-const loginForm =
-    document.getElementById(
-        "loginForm"
-    );
-
-const loginButton =
-    document.getElementById(
-        "loginButton"
-    );
-
-const loginError =
-    document.getElementById(
-        "loginError"
-    );
-
-const loading =
-    document.getElementById(
-        "loading"
-    );
-
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const loginScreen = document.getElementById("loginScreen");
+const app = document.getElementById("app");
+const loginForm = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+const loginError = document.getElementById("loginError");
+const loading = document.getElementById("loading");
 
 let analytics = null;
+let isOpening = false;
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-function showLoading(){
-
-    loading.classList.remove(
-        "hidden"
-    );
-
+function setLoginError(message) {
+  loginError.textContent = message || "";
 }
 
-function hideLoading(){
-
-    loading.classList.add(
-        "hidden"
-    );
-
+function showLoading() {
+  loading.classList.remove("hidden");
 }
 
-
-/* =========================================================
-   ADMIN VERIFY
-========================================================= */
-
-async function isAdmin(){
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.rpc(
-        "chatx_is_admin"
-    );
-
-
-    if(error){
-
-        console.error(
-            "Admin check:",
-            error
-        );
-
-        return false;
-
-    }
-
-
-    return data === true;
-
+function hideLoading() {
+  loading.classList.add("hidden");
 }
 
+function friendlyError(error) {
+  const message = String(error?.message || error || "Unknown error");
 
-/* =========================================================
-   LOGIN
-========================================================= */
+  if (/invalid login credentials/i.test(message)) {
+    return "Invalid login credentials. Check the email, password, and CHATX-ADMIN project.";
+  }
 
-loginForm.addEventListener(
-    "submit",
-    async event => {
+  if (/chatx_is_admin|function .* does not exist|schema cache/i.test(message)) {
+    return "Admin verification RPC is missing. Check that chatx_is_admin() exists in CHATX-ADMIN.";
+  }
 
-        event.preventDefault();
+  if (/chatx_admin_analytics/i.test(message)) {
+    return "Analytics RPC is missing. Check that chatx_admin_analytics() exists in CHATX-ADMIN.";
+  }
 
-
-        loginError.textContent = "";
-
-
-        const email =
-            document
-                .getElementById(
-                    "emailInput"
-                )
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById(
-                    "passwordInput"
-                )
-                .value;
-
-
-        loginButton.disabled =
-            true;
-
-        loginButton.textContent =
-            "Signing In...";
-
-
-        const {
-            error
-        } =
-        await supabaseClient.auth
-            .signInWithPassword({
-                email,
-                password
-            });
-
-
-        if(error){
-
-            loginError.textContent =
-                error.message;
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "Sign In";
-
-            return;
-
-        }
-
-
-        const admin =
-            await isAdmin();
-
-
-        if(!admin){
-
-            await supabaseClient.auth
-                .signOut();
-
-
-            loginError.textContent =
-                "This account does not have admin access.";
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "Sign In";
-
-            return;
-
-        }
-
-
-        loginButton.disabled =
-            false;
-
-        loginButton.textContent =
-            "Sign In";
-
-
-        openApp();
-
-    }
-);
-
-
-/* =========================================================
-   SESSION
-========================================================= */
-
-async function checkSession(){
-
-    const {
-        data
-    } =
-    await supabaseClient.auth
-        .getSession();
-
-
-    const session =
-        data.session;
-
-
-    if(!session)
-        return;
-
-
-    const admin =
-        await isAdmin();
-
-
-    if(admin){
-
-        openApp();
-
-    }else{
-
-        await supabaseClient.auth
-            .signOut();
-
-    }
-
+  return message;
 }
 
+async function isAdmin() {
+  const { data, error } = await supabaseClient.rpc("chatx_is_admin");
+  if (error) throw error;
+  return data === true;
+}
 
-supabaseClient.auth.onAuthStateChange(
-    async (event)=>{
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  setLoginError("");
+  loginButton.disabled = true;
+  loginButton.textContent = "Signing In...";
 
-        if(
-            event ===
-            "SIGNED_OUT"
-        ){
+  try {
+    const email = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
 
-            closeApp();
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) throw error;
 
-        }
-
+    let admin;
+    try {
+      admin = await isAdmin();
+    } catch (error) {
+      await supabaseClient.auth.signOut();
+      throw error;
     }
-);
 
+    if (!admin) {
+      await supabaseClient.auth.signOut();
+      throw new Error("This account does not have admin access in CHATX-ADMIN.");
+    }
 
-/* =========================================================
-   OPEN APP
-========================================================= */
+    await openApp();
+  } catch (error) {
+    setLoginError(friendlyError(error));
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "Sign In";
+  }
+});
 
-async function openApp(){
+async function checkSession() {
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    if (!data.session) return;
 
-    loginScreen.classList.add(
-        "hidden"
-    );
+    if (await isAdmin()) {
+      await openApp();
+    } else {
+      await supabaseClient.auth.signOut();
+      setLoginError("This account does not have admin access in CHATX-ADMIN.");
+    }
+  } catch (error) {
+    console.error("Session check:", error);
+    setLoginError(friendlyError(error));
+  }
+}
 
-    app.classList.remove(
-        "hidden"
-    );
+supabaseClient.auth.onAuthStateChange((event) => {
+  if (event === "SIGNED_OUT") closeApp();
+});
 
+async function openApp() {
+  if (isOpening) return;
+  isOpening = true;
+  loginScreen.classList.add("hidden");
+  app.classList.remove("hidden");
 
+  try {
     await loadAnalytics();
-
+  } finally {
+    isOpening = false;
+  }
 }
 
-
-/* =========================================================
-   CLOSE APP
-========================================================= */
-
-function closeApp(){
-
-    app.classList.add(
-        "hidden"
-    );
-
-    loginScreen.classList.remove(
-        "hidden"
-    );
-
-    loginForm.reset();
-
+function closeApp() {
+  app.classList.add("hidden");
+  loginScreen.classList.remove("hidden");
+  loginForm.reset();
+  setLoginError("");
 }
 
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document
-    .getElementById(
-        "logoutButton"
-    )
-    .addEventListener(
-        "click",
-        async ()=>{
-
-            await supabaseClient.auth
-                .signOut();
-
-        }
-    );
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
+document.getElementById("logoutButton").addEventListener("click", async () => {
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+  } catch (error) {
+    setLoginError(friendlyError(error));
+  }
+});
 
 const pageElements = {
-
-    dashboard:
-        document.getElementById(
-            "dashboardPage"
-        ),
-
-    users:
-        document.getElementById(
-            "usersPage"
-        ),
-
-    messages:
-        document.getElementById(
-            "messagesPage"
-        ),
-
-    activity:
-        document.getElementById(
-            "activityPage"
-        )
-
+  dashboard: document.getElementById("dashboardPage"),
+  users: document.getElementById("usersPage"),
+  messages: document.getElementById("messagesPage"),
+  activity: document.getElementById("activityPage")
 };
-
 
 const pageInfo = {
-
-    dashboard:{
-        title:"Dashboard",
-        subtitle:
-            "Real ChatX database analytics"
-    },
-
-    users:{
-        title:"Users",
-        subtitle:
-            "Most active ChatX users"
-    },
-
-    messages:{
-        title:"Messages",
-        subtitle:
-            "Recent messaging activity"
-    },
-
-    activity:{
-        title:"Activity",
-        subtitle:
-            "Recent ChatX activity"
-    }
-
+  dashboard: { title: "Dashboard", subtitle: "Real ChatX database analytics" },
+  users: { title: "Users", subtitle: "Most active ChatX users" },
+  messages: { title: "Messages", subtitle: "Recent messaging activity" },
+  activity: { title: "Activity", subtitle: "Recent ChatX activity" }
 };
 
+document.querySelectorAll("[data-page]").forEach((button) => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
 
-document
-    .querySelectorAll(
-        "[data-page]"
-    )
-    .forEach(
-        button => {
+function showPage(page) {
+  if (!Object.prototype.hasOwnProperty.call(pageElements, page)) return;
 
-            button.addEventListener(
-                "click",
-                ()=>{
+  Object.keys(pageElements).forEach((key) => {
+    pageElements[key].classList.toggle("hidden", key !== page);
+  });
 
-                    showPage(
-                        button.dataset.page
-                    );
+  document.querySelectorAll("[data-page]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.page === page);
+  });
 
-                }
-            );
-
-        }
-    );
-
-
-function showPage(
-    page
-){
-
-    Object
-        .keys(pageElements)
-        .forEach(
-            key => {
-
-                pageElements[key]
-                    .classList
-                    .toggle(
-                        "hidden",
-                        key !== page
-                    );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            "[data-page]"
-        )
-        .forEach(
-            button => {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.page === page
-                );
-
-            }
-        );
-
-
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        pageInfo[page].title;
-
-
-    document.getElementById(
-        "pageSubtitle"
-    ).textContent =
-        pageInfo[page].subtitle;
-
+  document.getElementById("pageTitle").textContent = pageInfo[page].title;
+  document.getElementById("pageSubtitle").textContent = pageInfo[page].subtitle;
 }
 
+async function loadAnalytics() {
+  showLoading();
 
-/* =========================================================
-   LOAD ANALYTICS
-========================================================= */
+  try {
+    const { data, error } = await supabaseClient.rpc("chatx_admin_analytics");
+    if (error) throw error;
 
-async function loadAnalytics(){
+    analytics = typeof data === "string" ? JSON.parse(data) : data;
 
-    showLoading();
-
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.rpc(
-        "chatx_admin_analytics"
-    );
-
-
-    hideLoading();
-
-
-    if(error){
-
-        console.error(
-            "Analytics RPC:",
-            error
-        );
-
-
-        alert(
-            "Analytics error:\n" +
-            error.message
-        );
-
-        return;
-
+    if (!analytics || typeof analytics !== "object") {
+      throw new Error("Analytics RPC returned an empty or invalid response.");
     }
-
-
-    analytics =
-        typeof data === "string"
-            ? JSON.parse(data)
-            : data;
-
 
     renderAll();
-
+  } catch (error) {
+    console.error("Analytics RPC:", error);
+    alert("Analytics error:\n" + friendlyError(error));
+  } finally {
+    hideLoading();
+  }
 }
 
+function renderAll() {
+  if (!analytics) return;
 
-/* =========================================================
-   RENDER ALL
-========================================================= */
-
-function renderAll(){
-
-    if(!analytics)
-        return;
-
-
-    renderStats();
-
-    renderChart(
-        "userChart",
-        analytics.user_growth
-    );
-
-    renderChart(
-        "messageChart",
-        analytics.message_growth
-    );
-
-    renderTopUsers(
-        analytics.top_users
-    );
-
-    renderRecentUsers(
-        analytics.recent_users
-    );
-
-    renderRecentMessages(
-        analytics.recent_messages
-    );
-
+  renderStats();
+  renderChart("userChart", analytics.user_growth);
+  renderChart("messageChart", analytics.message_growth);
+  renderTopUsers(analytics.top_users);
+  renderRecentUsers(analytics.recent_users);
+  renderRecentMessages(analytics.recent_messages);
 }
 
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function renderStats(){
-
-    const d =
-        analytics;
-
-
-    document.getElementById(
-        "totalUsers"
-    ).textContent =
-        number(
-            d.total_users
-        );
-
-
-    document.getElementById(
-        "usersToday"
-    ).textContent =
-        number(
-            d.users_today
-        ) +
-        " new today";
-
-
-    document.getElementById(
-        "activeUsers"
-    ).textContent =
-        number(
-            d.active_users_7_days
-        );
-
-
-    document.getElementById(
-        "totalMessages"
-    ).textContent =
-        number(
-            d.total_messages
-        );
-
-
-    document.getElementById(
-        "messagesToday"
-    ).textContent =
-        number(
-            d.messages_today
-        ) +
-        " today";
-
-
-    document.getElementById(
-        "newUsers30"
-    ).textContent =
-        number(
-            d.users_30_days
-        );
-
-
-    document.getElementById(
-        "miniUsersToday"
-    ).textContent =
-        number(
-            d.users_today
-        );
-
-
-    document.getElementById(
-        "miniUsers7"
-    ).textContent =
-        number(
-            d.users_7_days
-        );
-
-
-    document.getElementById(
-        "miniMessages7"
-    ).textContent =
-        number(
-            d.messages_7_days
-        );
-
-
-    document.getElementById(
-        "miniMessages30"
-    ).textContent =
-        number(
-            d.messages_30_days
-        );
-
+function number(value) {
+  const parsed = Number(value ?? 0);
+  return (Number.isFinite(parsed) ? parsed : 0).toLocaleString("en-IN");
 }
 
+function renderStats() {
+  const d = analytics;
 
-/* =========================================================
-   CHART
-========================================================= */
-
-function renderChart(
-    elementId,
-    rows
-){
-
-    const element =
-        document.getElementById(
-            elementId
-        );
-
-
-    element.innerHTML =
-        "";
-
-
-    if(
-        !Array.isArray(rows) ||
-        rows.length === 0
-    ){
-
-        element.innerHTML =
-            `<div class="empty">
-                No data available
-            </div>`;
-
-        return;
-
-    }
-
-
-    const values =
-        rows.map(
-            row =>
-                Number(
-                    row.count || 0
-                )
-        );
-
-
-    const maximum =
-        Math.max(
-            ...values,
-            1
-        );
-
-
-    rows.forEach(
-        row => {
-
-            const value =
-                Number(
-                    row.count || 0
-                );
-
-
-            const bar =
-                document.createElement(
-                    "div"
-                );
-
-
-            bar.className =
-                "chartBar";
-
-
-            bar.style.height =
-                Math.max(
-                    4,
-                    (value / maximum) * 100
-                ) + "%";
-
-
-            bar.title =
-                formatDateOnly(
-                    row.date
-                ) +
-                ": " +
-                value;
-
-
-            element.appendChild(
-                bar
-            );
-
-        }
-    );
-
+  document.getElementById("totalUsers").textContent = number(d.total_users);
+  document.getElementById("usersToday").textContent = number(d.users_today) + " new today";
+  document.getElementById("activeUsers").textContent = number(d.active_users_7_days);
+  document.getElementById("totalMessages").textContent = number(d.total_messages);
+  document.getElementById("messagesToday").textContent = number(d.messages_today) + " today";
+  document.getElementById("newUsers30").textContent = number(d.users_30_days);
+  document.getElementById("miniUsersToday").textContent = number(d.users_today);
+  document.getElementById("miniUsers7").textContent = number(d.users_7_days);
+  document.getElementById("miniMessages7").textContent = number(d.messages_7_days);
+  document.getElementById("miniMessages30").textContent = number(d.messages_30_days);
 }
 
+function renderChart(elementId, rows) {
+  const element = document.getElementById(elementId);
+  element.replaceChildren();
 
-/* =========================================================
-   TOP USERS
-========================================================= */
+  if (!Array.isArray(rows) || rows.length === 0) {
+    element.innerHTML = '<div class="empty">No data available</div>';
+    return;
+  }
 
-function renderTopUsers(
-    users
-){
+  const values = rows.map((row) => Number(row.count ?? 0) || 0);
+  const maximum = Math.max(...values, 1);
 
-    const element =
-        document.getElementById(
-            "topUsers"
-        );
-
-
-    element.innerHTML =
-        "";
-
-
-    if(
-        !Array.isArray(users) ||
-        users.length === 0
-    ){
-
-        element.innerHTML =
-            `<div class="empty">
-                No user activity yet.
-            </div>`;
-
-        return;
-
-    }
-
-
-    users.forEach(
-        (user,index)=>{
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "listItem";
-
-
-            row.innerHTML = `
-
-                <div class="rank">
-                    #${index + 1}
-                </div>
-
-                <div class="avatar">
-                    ${initial(
-                        user.username
-                    )}
-                </div>
-
-                <div class="itemMain">
-
-                    <div class="itemName">
-                        ${escapeHTML(
-                            user.username
-                        )}
-                    </div>
-
-                    <div class="itemSub">
-                        Most active
-                    </div>
-
-                </div>
-
-                <div class="itemValue">
-                    ${number(
-                        user.messages
-                    )} msgs
-                </div>
-
-            `;
-
-
-            element.appendChild(
-                row
-            );
-
-        }
-    );
-
+  rows.forEach((row) => {
+    const value = Number(row.count ?? 0) || 0;
+    const bar = document.createElement("div");
+    bar.className = "chartBar";
+    bar.style.height = Math.max(4, (value / maximum) * 100) + "%";
+    bar.title = formatDateOnly(row.day ?? row.date ?? row.created_at) + ": " + value;
+    bar.setAttribute("aria-label", bar.title);
+    element.appendChild(bar);
+  });
 }
 
+function renderTopUsers(users) {
+  const element = document.getElementById("topUsers");
+  element.replaceChildren();
 
-/* =========================================================
-   RECENT USERS
-========================================================= */
+  if (!Array.isArray(users) || users.length === 0) {
+    element.innerHTML = '<div class="empty">No user activity yet.</div>';
+    return;
+  }
 
-function renderRecentUsers(
-    users
-){
-
-    const element =
-        document.getElementById(
-            "recentUsers"
-        );
-
-
-    element.innerHTML =
-        "";
-
-
-    if(
-        !Array.isArray(users) ||
-        users.length === 0
-    ){
-
-        element.innerHTML =
-            `<div class="empty">
-                No users yet.
-            </div>`;
-
-        return;
-
-    }
-
-
-    users.forEach(
-        (user,index)=>{
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "listItem";
-
-
-            row.innerHTML = `
-
-                <div class="rank">
-                    ${index + 1}
-                </div>
-
-                <div class="avatar">
-                    ${initial(
-                        user.username
-                    )}
-                </div>
-
-                <div class="itemMain">
-
-                    <div class="itemName">
-                        ${escapeHTML(
-                            user.username
-                        )}
-                    </div>
-
-                    <div class="itemSub">
-                        Joined
-                        ${formatDate(
-                            user.created_at
-                        )}
-                    </div>
-
-                </div>
-
-            `;
-
-
-            element.appendChild(
-                row
-            );
-
-        }
-    );
-
+  users.forEach((user, index) => {
+    const username = user.username ?? user.name ?? "Unknown user";
+    const row = document.createElement("div");
+    row.className = "listItem";
+    row.innerHTML = `
+      <div class="rank">#${index + 1}</div>
+      <div class="avatar">${initial(username)}</div>
+      <div class="itemMain">
+        <div class="itemName">${escapeHTML(username)}</div>
+        <div class="itemSub">Most active</div>
+      </div>
+      <div class="itemValue">${number(user.messages ?? user.message_count ?? user.total_messages)} msgs</div>`;
+    element.appendChild(row);
+  });
 }
 
+function renderRecentUsers(users) {
+  const element = document.getElementById("recentUsers");
+  element.replaceChildren();
 
-/* =========================================================
-   RECENT MESSAGES
-========================================================= */
+  if (!Array.isArray(users) || users.length === 0) {
+    element.innerHTML = '<div class="empty">No users yet.</div>';
+    return;
+  }
 
-function renderRecentMessages(
-    messages
-){
-
-    const element =
-        document.getElementById(
-            "recentMessages"
-        );
-
-
-    element.innerHTML =
-        "";
-
-
-    if(
-        !Array.isArray(messages) ||
-        messages.length === 0
-    ){
-
-        element.innerHTML =
-            `<div class="empty">
-                No messages yet.
-            </div>`;
-
-        return;
-
-    }
-
-
-    messages.forEach(
-        (message,index)=>{
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "listItem";
-
-
-            row.innerHTML = `
-
-                <div class="rank">
-                    ${index + 1}
-                </div>
-
-                <div class="avatar">
-                    ${initial(
-                        message.sender
-                    )}
-                </div>
-
-                <div class="itemMain">
-
-                    <div class="itemName">
-                        ${escapeHTML(
-                            message.sender
-                        )}
-                        →
-                        ${escapeHTML(
-                            message.receiver
-                        )}
-                    </div>
-
-                    <div class="itemSub">
-                        ${formatDate(
-                            message.created_at
-                        )}
-                    </div>
-
-                </div>
-
-            `;
-
-
-            element.appendChild(
-                row
-            );
-
-        }
-    );
-
+  users.forEach((user, index) => {
+    const username = user.username ?? user.name ?? user.email ?? "Unknown user";
+    const row = document.createElement("div");
+    row.className = "listItem";
+    row.innerHTML = `
+      <div class="rank">${index + 1}</div>
+      <div class="avatar">${initial(username)}</div>
+      <div class="itemMain">
+        <div class="itemName">${escapeHTML(username)}</div>
+        <div class="itemSub">Joined ${escapeHTML(formatDate(user.created_at ?? user.createdAt))}</div>
+      </div>`;
+    element.appendChild(row);
+  });
 }
 
+function renderRecentMessages(messages) {
+  const element = document.getElementById("recentMessages");
+  element.replaceChildren();
 
-/* =========================================================
-   HELPERS
-========================================================= */
+  if (!Array.isArray(messages) || messages.length === 0) {
+    element.innerHTML = '<div class="empty">No messages yet.</div>';
+    return;
+  }
 
-function number(
-    value
-){
-
-    return Number(
-        value || 0
-    ).toLocaleString(
-        "en-IN"
-    );
-
+  messages.forEach((message, index) => {
+    const sender = message.sender ?? message.sender_username ?? message.sender_name ?? "Unknown";
+    const receiver = message.receiver ?? message.receiver_username ?? message.receiver_name ?? "Unknown";
+    const row = document.createElement("div");
+    row.className = "listItem";
+    row.innerHTML = `
+      <div class="rank">${index + 1}</div>
+      <div class="avatar">${initial(sender)}</div>
+      <div class="itemMain">
+        <div class="itemName">${escapeHTML(sender)} → ${escapeHTML(receiver)}</div>
+        <div class="itemSub">${escapeHTML(formatDate(message.created_at ?? message.createdAt))}</div>
+      </div>`;
+    element.appendChild(row);
+  });
 }
 
-
-function initial(
-    value
-){
-
-    const text =
-        String(
-            value || "U"
-        )
-        .trim();
-
-
-    return escapeHTML(
-        (
-            text.charAt(0) ||
-            "U"
-        ).toUpperCase()
-    );
-
+function initial(value) {
+  const text = String(value ?? "U").trim();
+  return escapeHTML((text.charAt(0) || "U").toUpperCase());
 }
 
-
-function escapeHTML(
-    value
-){
-
-    return String(
-        value ?? ""
-    )
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
-
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
+function formatDate(value) {
+  if (!value) return "Unknown";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Unknown";
 
-function formatDate(
-    value
-){
-
-    if(!value)
-        return "Unknown";
-
-
-    const date =
-        new Date(
-            value
-        );
-
-
-    return date.toLocaleString(
-        "en-IN",
-        {
-            day:"2-digit",
-            month:"short",
-            hour:"2-digit",
-            minute:"2-digit"
-        }
-    );
-
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 }
 
+function formatDateOnly(value) {
+  if (!value) return "Unknown date";
 
-function formatDateOnly(
-    value
-){
+  const text = String(value);
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
-    if(!value)
-        return "";
+  if (match) {
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  }
 
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return text;
 
-    const date =
-        new Date(
-            value
-        );
-
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day:"2-digit",
-            month:"short"
-        }
-    );
-
+  return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
 }
-
-
-/* =========================================================
-   START
-========================================================= */
 
 checkSession();
-
 </script>
-
 </body>
 </html>
